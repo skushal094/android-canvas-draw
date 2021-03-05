@@ -24,6 +24,8 @@
         app:showAsAction="never">
 
         <menu>
+            <item android:id="@+id/only_border"
+                android:title="Only Border" />
             <item android:id="@+id/color_red"
                 android:title="Red" />
             <item android:id="@+id/color_blue"

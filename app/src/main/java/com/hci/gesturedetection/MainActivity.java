@@ -22,8 +22,8 @@ import com.google.android.material.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
 
     DrawingView dv;
-    private Paint mPaint, mFillPaint;
-    private int mode = R.id.shape_line;
+    private Paint mPaint, mFillPaint, mHollowPaint, mPaintToUse;
+    private int shape_mode = R.id.shape_line;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,32 +37,36 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.shape_line:
-                mode = R.id.shape_line;
+                shape_mode = R.id.shape_line;
                 break;
             case R.id.shape_circle:
-                mode = R.id.shape_circle;
+                shape_mode = R.id.shape_circle;
                 break;
             case R.id.shape_rect:
-                mode = R.id.shape_rect;
+                shape_mode = R.id.shape_rect;
                 break;
             case R.id.shape_triangle:
-                mode = R.id.shape_triangle;
+                shape_mode = R.id.shape_triangle;
+                break;
+
+            case R.id.only_border:
+                mPaintToUse = mHollowPaint;
                 break;
             case R.id.color_blue:
-                mode = R.id.color_blue;
                 mFillPaint.setColor(Color.BLUE);
+                mPaintToUse = mFillPaint;
                 break;
             case R.id.color_green:
-                mode = R.id.color_green;
                 mFillPaint.setColor(Color.GREEN);
+                mPaintToUse = mFillPaint;
                 break;
             case R.id.color_red:
-                mode = R.id.color_red;
                 mFillPaint.setColor(Color.RED);
+                mPaintToUse = mFillPaint;
                 break;
             case R.id.color_yellow:
-                mode = R.id.color_yellow;
                 mFillPaint.setColor(Color.YELLOW);
+                mPaintToUse = mFillPaint;
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -84,14 +88,21 @@ public class MainActivity extends AppCompatActivity {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(15);
 
-        mFillPaint = new Paint();
+        mFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mFillPaint.setStrokeWidth(15);
+        mFillPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mFillPaint.setAntiAlias(true);
-        mFillPaint.setDither(true);
-        mFillPaint.setStyle(Paint.Style.STROKE);
-        mFillPaint.setStrokeJoin(Paint.Join.ROUND);
-        mFillPaint.setStrokeCap(Paint.Cap.SQUARE);
-        mFillPaint.setStrokeWidth(10);
-        mFillPaint.setColor(Color.RED); // by default filling color will be red
+
+        mHollowPaint = new Paint();
+        mHollowPaint.setAntiAlias(true);
+        mHollowPaint.setDither(true);
+        mHollowPaint.setStyle(Paint.Style.STROKE);
+        mHollowPaint.setStrokeJoin(Paint.Join.ROUND);
+        mHollowPaint.setStrokeCap(Paint.Cap.SQUARE);
+        mHollowPaint.setStrokeWidth(15);
+        mHollowPaint.setColor(Color.BLACK);
+
+        mPaintToUse = mHollowPaint;    // by default the hollow object will be created
     }
 
     public class DrawingView extends View {
@@ -106,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         private Paint circlePaint;
         private Path circlePath;
 
-        private float xmin=-1000, xmax=-1000, ymin=-1000, ymax=-1000;
-        float xstart=0, ystart=0, xend=0, yend=0;
+        private float xmin = -1000, xmax = -1000, ymin = -1000, ymax = -1000;
+        float xstart = 0, ystart = 0, xend = 0, yend = 0;
 
         public DrawingView(Context c) {
             super(c);
@@ -175,36 +186,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void drawShape() {
-            if (mode == R.id.shape_rect) {
-                mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaint);
-            }
-            else if (mode == R.id.shape_circle) {
-                mCanvas.drawCircle((xmax+xmin)/2, (ymax+ymin)/2, ((xmax-xmin) + (ymax-ymin)) / 4, mPaint);
-            }
-            else if (mode == R.id.shape_triangle) {
-                mCanvas.drawLine((xmax+xmin)/2, ymin, xmin, ymax, mPaint);
-                mCanvas.drawLine(xmin, ymax, xmax, ymax, mPaint);
-                mCanvas.drawLine(xmax, ymax, (xmax+xmin)/2, ymin, mPaint);
-            }
-            else if (mode == R.id.shape_line) {
-                mCanvas.drawLine(xstart, ystart, xend, yend, mPaint);
-            }
-        }
-
-        private void fillColor(float x, float y) {
-            if (x < 0 || y < 0 || y >= mBitmap.getHeight() || x >= mBitmap.getWidth()) {
-                return;
-            }
-            int currentPixel = mBitmap.getPixel((int) x, (int) y);
-            System.out.println("" + Color.alpha(currentPixel) + " " + Color.red(mBitmap.getPixel((int) x, (int) y)) + " " + Color.green(mBitmap.getPixel((int) x, (int) y)) + " " + Color.blue(mBitmap.getPixel((int) x, (int) y)));
-//            System.out.println("" + currentPixel);
-            if (!(Color.alpha(currentPixel) == 255 && Color.red(currentPixel) == 0 && Color.green(currentPixel) == 0 && Color.blue(currentPixel) == 0)) {
-//            if (Color.alpha()) {
-                mCanvas.drawPoint(x, y, mFillPaint);
-                fillColor(x, y-10);
-                fillColor(x-10, y);
-                fillColor(x, y+10);
-                fillColor(x+10, y);
+            if (shape_mode == R.id.shape_rect) {
+                mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaintToUse);
+            } else if (shape_mode == R.id.shape_circle) {
+                mCanvas.drawCircle((xmax + xmin) / 2, (ymax + ymin) / 2, ((xmax - xmin) + (ymax - ymin)) / 4, mPaintToUse);
+            } else if (shape_mode == R.id.shape_triangle) {
+                Path path = new Path();
+                path.setFillType(Path.FillType.EVEN_ODD);
+                path.moveTo((xmax + xmin) / 2, ymin);
+                path.lineTo(xmin, ymax);
+                path.lineTo(xmax, ymax);
+                path.lineTo((xmax + xmin) / 2, ymin);
+                path.close();
+                mCanvas.drawPath(path, mPaintToUse);
+            } else if (shape_mode == R.id.shape_line) {
+                mCanvas.drawLine(xstart, ystart, xend, yend, mPaintToUse);
             }
         }
 
@@ -240,13 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_UP:
                     xend = x;
                     yend = y;
-                    if (mode == R.id.shape_line || mode == R.id.shape_rect || mode == R.id.shape_circle || mode == R.id.shape_triangle) {
-                        drawShape();
-                        System.out.println("" + Color.alpha(mBitmap.getPixel((int) x, (int) y)) + " " + Color.red(mBitmap.getPixel((int) x, (int) y)) + " " + Color.green(mBitmap.getPixel((int) x, (int) y)) + " " + Color.blue(mBitmap.getPixel((int) x, (int) y)));
-                    }
-                    else {
-                        fillColor(x, y);
-                    }
+                    drawShape();
                     xmin = -1000;
                     xmax = -1000;
                     ymin = -1000;
