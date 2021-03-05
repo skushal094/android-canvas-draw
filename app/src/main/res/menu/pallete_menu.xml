@@ -34,6 +34,16 @@
                 android:title="Green" />
             <item android:id="@+id/color_yellow"
                 android:title="Yellow" />
+            <item android:id="@+id/color_cyan"
+                android:title="Cyan" />
+            <item android:id="@+id/color_dark_gray"
+                android:title="Dark Gray" />
+            <item android:id="@+id/color_gray"
+                android:title="Gray" />
+            <item android:id="@+id/color_light_gray"
+                android:title="Light Gray" />
+            <item android:id="@+id/color_magenta"
+                android:title="Magenta" />
         </menu>
 
     </item>

@@ -68,6 +68,26 @@ public class MainActivity extends AppCompatActivity {
                 mFillPaint.setColor(Color.YELLOW);
                 mPaintToUse = mFillPaint;
                 break;
+            case R.id.color_cyan:
+                mFillPaint.setColor(Color.CYAN);
+                mPaintToUse = mFillPaint;
+                break;
+            case R.id.color_dark_gray:
+                mFillPaint.setColor(Color.DKGRAY);
+                mPaintToUse = mFillPaint;
+                break;
+            case R.id.color_gray:
+                mFillPaint.setColor(Color.GRAY);
+                mPaintToUse = mFillPaint;
+                break;
+            case R.id.color_light_gray:
+                mFillPaint.setColor(Color.LTGRAY);
+                mPaintToUse = mFillPaint;
+                break;
+            case R.id.color_magenta:
+                mFillPaint.setColor(Color.MAGENTA);
+                mPaintToUse = mFillPaint;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
