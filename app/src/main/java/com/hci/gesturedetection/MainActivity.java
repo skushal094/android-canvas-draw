@@ -22,8 +22,9 @@ import com.google.android.material.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
 
     DrawingView dv;
-    private Paint mPaint, mFillPaint, mHollowPaint, mPaintToUse;
+    private Paint mPaint, mFillPaint, mHollowPaint, mPaintToUse, mPaintFillBorder;
     private int shape_mode = R.id.shape_line;
+    private boolean isFilling = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,41 +51,51 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.only_border:
+                isFilling = false;
                 mPaintToUse = mHollowPaint;
                 break;
             case R.id.color_blue:
+                isFilling = true;
                 mFillPaint.setColor(Color.BLUE);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_green:
+                isFilling = true;
                 mFillPaint.setColor(Color.GREEN);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_red:
+                isFilling = true;
                 mFillPaint.setColor(Color.RED);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_yellow:
+                isFilling = true;
                 mFillPaint.setColor(Color.YELLOW);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_cyan:
+                isFilling = true;
                 mFillPaint.setColor(Color.CYAN);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_dark_gray:
+                isFilling = true;
                 mFillPaint.setColor(Color.DKGRAY);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_gray:
+                isFilling = true;
                 mFillPaint.setColor(Color.GRAY);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_light_gray:
+                isFilling = true;
                 mFillPaint.setColor(Color.LTGRAY);
                 mPaintToUse = mFillPaint;
                 break;
             case R.id.color_magenta:
+                isFilling = true;
                 mFillPaint.setColor(Color.MAGENTA);
                 mPaintToUse = mFillPaint;
                 break;
@@ -109,9 +120,18 @@ public class MainActivity extends AppCompatActivity {
         mPaint.setStrokeWidth(15);
 
         mFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mFillPaint.setStrokeWidth(15);
+        mFillPaint.setStrokeWidth(5);
         mFillPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mFillPaint.setAntiAlias(true);
+
+        mPaintFillBorder = new Paint();
+        mPaintFillBorder.setAntiAlias(true);
+        mPaintFillBorder.setDither(true);
+        mPaintFillBorder.setStyle(Paint.Style.STROKE);
+        mPaintFillBorder.setStrokeJoin(Paint.Join.ROUND);
+        mPaintFillBorder.setStrokeCap(Paint.Cap.SQUARE);
+        mPaintFillBorder.setStrokeWidth(5);
+        mPaintFillBorder.setColor(Color.BLACK);
 
         mHollowPaint = new Paint();
         mHollowPaint.setAntiAlias(true);
@@ -208,8 +228,14 @@ public class MainActivity extends AppCompatActivity {
         private void drawShape() {
             if (shape_mode == R.id.shape_rect) {
                 mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaintToUse);
+                if (isFilling) {
+                    mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaintFillBorder);
+                }
             } else if (shape_mode == R.id.shape_circle) {
                 mCanvas.drawCircle((xmax + xmin) / 2, (ymax + ymin) / 2, ((xmax - xmin) + (ymax - ymin)) / 4, mPaintToUse);
+                if (isFilling) {
+                    mCanvas.drawCircle((xmax + xmin) / 2, (ymax + ymin) / 2, ((xmax - xmin) + (ymax - ymin)) / 4, mPaintFillBorder);
+                }
             } else if (shape_mode == R.id.shape_triangle) {
                 Path path = new Path();
                 path.setFillType(Path.FillType.EVEN_ODD);
@@ -219,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
                 path.lineTo((xmax + xmin) / 2, ymin);
                 path.close();
                 mCanvas.drawPath(path, mPaintToUse);
+                if (isFilling) {
+                    mCanvas.drawPath(path, mPaintFillBorder);
+                }
             } else if (shape_mode == R.id.shape_line) {
                 mCanvas.drawLine(xstart, ystart, xend, yend, mPaintToUse);
             }
