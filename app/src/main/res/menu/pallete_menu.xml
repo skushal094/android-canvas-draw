@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/item_shape"
+        android:title="Shapes"
+        app:showAsAction="never">
+
+        <menu>
+            <item android:id="@+id/shape_line"
+                android:title="Line" />
+            <item android:id="@+id/shape_rect"
+                android:title="Rectangle" />
+            <item android:id="@+id/shape_circle"
+                android:title="Circle" />
+            <item android:id="@+id/shape_triangle"
+                android:title="Triangle" />
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/item_color"
+        android:title="Colors"
+        app:showAsAction="never">
+
+        <menu>
+            <item android:id="@+id/color_red"
+                android:title="Red" />
+            <item android:id="@+id/color_blue"
+                android:title="Blue" />
+            <item android:id="@+id/color_green"
+                android:title="Green" />
+            <item android:id="@+id/color_yellow"
+                android:title="Yellow" />
+        </menu>
+
+    </item>
+
+</menu>
