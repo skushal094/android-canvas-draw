@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/item_free_hand"
+        android:title="Free Hand"
+        app:showAsAction="never" />
+
     <item android:id="@+id/item_shape"
         android:title="Shapes"
         app:showAsAction="never">
@@ -26,6 +30,10 @@
         <menu>
             <item android:id="@+id/only_border"
                 android:title="Only Border" />
+            <item android:id="@+id/color_white"
+                android:title="White" />
+            <item android:id="@+id/color_black"
+                android:title="Black" />
             <item android:id="@+id/color_red"
                 android:title="Red" />
             <item android:id="@+id/color_blue"
@@ -47,5 +55,9 @@
         </menu>
 
     </item>
+
+    <item android:id="@+id/item_clear"
+        android:title="Clear"
+        app:showAsAction="never" />
 
 </menu>

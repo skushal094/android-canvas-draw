@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_free_hand:
+                shape_mode = 0; // zero for free hand
+                isFilling = false;
+                mPaintToUse = mHollowPaint;
+                break;
+
             case R.id.shape_line:
                 shape_mode = R.id.shape_line;
                 break;
@@ -53,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.only_border:
                 isFilling = false;
                 mPaintToUse = mHollowPaint;
+                break;
+            case R.id.color_white:
+                isFilling = true;
+                mFillPaint.setColor(Color.WHITE);
+                mPaintToUse = mFillPaint;
+                break;
+            case R.id.color_black:
+                isFilling = true;
+                mFillPaint.setColor(Color.BLACK);
+                mPaintToUse = mFillPaint;
                 break;
             case R.id.color_blue:
                 isFilling = true;
@@ -99,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 mFillPaint.setColor(Color.MAGENTA);
                 mPaintToUse = mFillPaint;
                 break;
+
+            case R.id.item_clear:
+                dv = new DrawingView(this);
+                dv.setBackgroundColor(0xFFFFFFFF);
+                setContentView(dv);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -117,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(15);
+        mPaint.setStrokeWidth(5);
 
         mFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mFillPaint.setStrokeWidth(5);
@@ -139,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         mHollowPaint.setStyle(Paint.Style.STROKE);
         mHollowPaint.setStrokeJoin(Paint.Join.ROUND);
         mHollowPaint.setStrokeCap(Paint.Cap.SQUARE);
-        mHollowPaint.setStrokeWidth(15);
+        mHollowPaint.setStrokeWidth(5);
         mHollowPaint.setColor(Color.BLACK);
 
         mPaintToUse = mHollowPaint;    // by default the hollow object will be created
@@ -220,7 +242,9 @@ public class MainActivity extends AppCompatActivity {
             mPath.lineTo(mX, mY);
             circlePath.reset();
             // commit the path to our offscreen
-//            mCanvas.drawPath(mPath, mPaint);
+            if (shape_mode == 0) {
+                mCanvas.drawPath(mPath, mPaintToUse);
+            }
             // kill this so we don't double draw
             mPath.reset();
         }
