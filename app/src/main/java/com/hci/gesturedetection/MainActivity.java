@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     // for convex hull
     List<Float> points;
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.pallete_menu, menu);
         return true;
@@ -48,13 +50,16 @@ public class MainActivity extends AppCompatActivity {
                 shape_mode = 0; // zero for free hand
                 isFilling = false;
                 mPaintToUse = mHollowPaint;
+                this.setTitle("freehand");
                 break;
 
             case R.id.shape_line:
                 shape_mode = R.id.shape_line;
+                this.setTitle("Line");
                 break;
             case R.id.shape_circle:
                 shape_mode = R.id.shape_circle;
+                this.setTitle("circle");
                 break;
             case R.id.shape_rect:
                 shape_mode = R.id.shape_rect;
@@ -187,7 +192,10 @@ public class MainActivity extends AppCompatActivity {
         private Path circlePath;
 
         private float xmin = -1000, xmax = -1000, ymin = -1000, ymax = -1000;
+        private float x_min = -1000, x_max = -1000, y_min = -1000, y_max = -1000;
         float xstart = 0, ystart = 0, xend = 0, yend = 0;
+        float x1,y1,x2,y2,x3,y3;
+        float res;
 
         public DrawingView(Context c) {
             super(c);
@@ -285,17 +293,50 @@ public class MainActivity extends AppCompatActivity {
                 // for convex
                 try {
                     List<Float> hullPoints = ConvexHull.main(points);    // This gives points of convex hull
-                    System.out.println(hullPoints.size());
+//                    System.out.println(hullPoints.size());
 
                     // TODO we have to find three points here
 
                     if (hullPoints.size() > 1) {
                         Path path2 = new Path();
                         path2.setFillType(Path.FillType.EVEN_ODD);
-                        path2.moveTo(hullPoints.get(0), hullPoints.get(1));
-                        for (int i = 2; i < hullPoints.size(); i = i + 2) {
-                            path2.lineTo(hullPoints.get(i), hullPoints.get(i + 1));
+                        res = 0;
+                        int total_points = hullPoints.size()/2;
+                        System.out.println("total_points"+total_points);
+                        for (int i = 0; i < total_points-4; i=i+2)
+                        {
+                            for (int j = i+2; j < total_points-2; j=j+2)
+                            {
+                                for (int k = i+4; k < total_points; k=k+2)
+                                {
+                                     x1 = hullPoints.get(i);
+                                     y1 = hullPoints.get(i+1);
+                                     x2 = hullPoints.get(j);
+                                     y2 = hullPoints.get(j+1);
+                                     x3 = hullPoints.get(k);
+                                     y3 = hullPoints.get(k+1);
+                                     res = (float) Math.max(res, 0.5 * Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)));
+                                }
+                            }
+
                         }
+                        System.out.println("area"+res);
+                        System.out.println("h"+hullPoints.size());
+                        System.out.println("hi"+x1);
+                        System.out.println("hii"+y1);
+                        System.out.println("hiii"+x2);
+                        System.out.println("hiiii"+y2);
+                        System.out.println("hiiiii"+x3);
+                        System.out.println("hiiiiii"+y3);
+
+//                        path2.moveTo(hullPoints.get(0), hullPoints.get(1));
+//                        for (int i = 2; i < hullPoints.size(); i = i + 2) {
+//                            path2.lineTo(hullPoints.get(i), hullPoints.get(i + 1));
+//                        }
+                        path2.moveTo(x1,y1);
+                        path2.lineTo(x2, y2);
+                        path2.lineTo(x3, y3);
+
                         path2.close();
                         int color2 = mPaintToUse.getColor();
                         mPaintToUse.setColor(Color.RED);
@@ -321,15 +362,19 @@ public class MainActivity extends AppCompatActivity {
 
             if ((xmin == -1000) || (xmin > x)) {
                 xmin = x;
+                y_min = y;
             }
             if ((xmax == -1000) || (xmax < x)) {
                 xmax = x;
+                y_max = y;
             }
             if ((ymin == -1000) || (ymin > y)) {
                 ymin = y;
+                x_min=x;
             }
             if ((ymax == -1000) || (ymax < y)) {
                 ymax = y;
+                x_max=x;
             }
 
             switch (event.getAction()) {
