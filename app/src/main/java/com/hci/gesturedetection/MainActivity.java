@@ -19,12 +19,19 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     DrawingView dv;
     private Paint mPaint, mFillPaint, mHollowPaint, mPaintToUse, mPaintFillBorder;
     private int shape_mode = R.id.shape_line;
     private boolean isFilling = false;
+
+    // for convex hull
+    List<Float> points;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,6 +228,9 @@ public class MainActivity extends AppCompatActivity {
         private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
+            points = new ArrayList<Float>();
+            points.add(x);
+            points.add(y);
             mX = x;
             mY = y;
         }
@@ -230,6 +240,8 @@ public class MainActivity extends AppCompatActivity {
             float dy = Math.abs(y - mY);
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
                 mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+                points.add(x);
+                points.add(y);
                 mX = x;
                 mY = y;
 
@@ -269,6 +281,31 @@ public class MainActivity extends AppCompatActivity {
                 path.lineTo((xmax + xmin) / 2, ymin);
                 path.close();
                 mCanvas.drawPath(path, mPaintToUse);
+
+                // for convex
+                try {
+                    List<Float> hullPoints = ConvexHull.main(points);    // This gives points of convex hull
+                    System.out.println(hullPoints.size());
+
+                    // TODO we have to find three points here
+
+                    if (hullPoints.size() > 1) {
+                        Path path2 = new Path();
+                        path2.setFillType(Path.FillType.EVEN_ODD);
+                        path2.moveTo(hullPoints.get(0), hullPoints.get(1));
+                        for (int i = 2; i < hullPoints.size(); i = i + 2) {
+                            path2.lineTo(hullPoints.get(i), hullPoints.get(i + 1));
+                        }
+                        path2.close();
+                        int color2 = mPaintToUse.getColor();
+                        mPaintToUse.setColor(Color.RED);
+                        mCanvas.drawPath(path2, mPaintToUse);
+                        mPaintToUse.setColor(color2);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 if (isFilling) {
                     mCanvas.drawPath(path, mPaintFillBorder);
                 }
