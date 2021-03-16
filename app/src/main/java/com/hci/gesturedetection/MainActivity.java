@@ -17,8 +17,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,9 +192,8 @@ public class MainActivity extends AppCompatActivity {
         private Paint circlePaint;
         private Path circlePath;
 
-        private float xmin = -1000, xmax = -1000, ymin = -1000, ymax = -1000;
         private float x_min = -1000, x_max = -1000, y_min = -1000, y_max = -1000;
-        float xstart = 0, ystart = 0, xend = 0, yend = 0;
+        float x_start = 0, y_start = 0, x_end = 0, y_end = 0;
         float x1, y1, x2, y2, x3, y3;
         float x1_f, y1_f, x2_f, y2_f, x3_f, y3_f;
         double res = 0.0;
@@ -275,14 +272,14 @@ public class MainActivity extends AppCompatActivity {
 
         private void drawShape() {
             if (shape_mode == R.id.shape_rect) {
-                mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaintToUse);
+                mCanvas.drawRect(x_min, y_min, x_max, y_max, mPaintToUse);
                 if (isFilling) {
-                    mCanvas.drawRect(xmin, ymin, xmax, ymax, mPaintFillBorder);
+                    mCanvas.drawRect(x_min, y_min, x_max, y_max, mPaintFillBorder);
                 }
             } else if (shape_mode == R.id.shape_circle) {
-                mCanvas.drawCircle((xmax + xmin) / 2, (ymax + ymin) / 2, ((xmax - xmin) + (ymax - ymin)) / 4, mPaintToUse);
+                mCanvas.drawCircle((x_max + x_min) / 2, (y_max + y_min) / 2, ((x_max - x_min) + (y_max - y_min)) / 4, mPaintToUse);
                 if (isFilling) {
-                    mCanvas.drawCircle((xmax + xmin) / 2, (ymax + ymin) / 2, ((xmax - xmin) + (ymax - ymin)) / 4, mPaintFillBorder);
+                    mCanvas.drawCircle((x_max + x_min) / 2, (y_max + y_min) / 2, ((x_max - x_min) + (y_max - y_min)) / 4, mPaintFillBorder);
                 }
             } else if (shape_mode == R.id.shape_triangle) {
                 Path path = new Path();
@@ -344,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
                     mCanvas.drawPath(path, mPaintFillBorder);
                 }
             } else if (shape_mode == R.id.shape_line) {
-                mCanvas.drawLine(xstart, ystart, xend, yend, mPaintToUse);
+                mCanvas.drawLine(x_start, y_start, x_end, y_end, mPaintToUse);
             }
         }
 
@@ -353,27 +350,23 @@ public class MainActivity extends AppCompatActivity {
             float x = event.getX();
             float y = event.getY();
 
-            if ((xmin == -1000) || (xmin > x)) {
-                xmin = x;
-                y_min = y;
-            }
-            if ((xmax == -1000) || (xmax < x)) {
-                xmax = x;
-                y_max = y;
-            }
-            if ((ymin == -1000) || (ymin > y)) {
-                ymin = y;
+            if ((x_min == -1000) || (x_min > x)) {
                 x_min = x;
             }
-            if ((ymax == -1000) || (ymax < y)) {
-                ymax = y;
+            if ((x_max == -1000) || (x_max < x)) {
                 x_max = x;
+            }
+            if ((y_min == -1000) || (y_min > y)) {
+                y_min = y;
+            }
+            if ((y_max == -1000) || (y_max < y)) {
+                y_max = y;
             }
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    xstart = x;
-                    ystart = y;
+                    x_start = x;
+                    y_start = y;
                     touch_start(x, y);
                     invalidate();
                     break;
@@ -382,13 +375,13 @@ public class MainActivity extends AppCompatActivity {
                     invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
-                    xend = x;
-                    yend = y;
+                    x_end = x;
+                    y_end = y;
                     drawShape();
-                    xmin = -1000;
-                    xmax = -1000;
-                    ymin = -1000;
-                    ymax = -1000;
+                    x_min = -1000;
+                    x_max = -1000;
+                    y_min = -1000;
+                    y_max = -1000;
                     touch_up();
                     invalidate();
                     break;
