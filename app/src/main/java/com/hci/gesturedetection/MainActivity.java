@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 shape_mode = 0; // zero for free hand
                 isFilling = false;
                 mPaintToUse = mHollowPaint;
-                this.setTitle("freehand");
+                this.setTitle("Free Hand");
                 break;
 
             case R.id.shape_line:
@@ -59,13 +59,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.shape_circle:
                 shape_mode = R.id.shape_circle;
-                this.setTitle("circle");
+                this.setTitle("Circle");
                 break;
             case R.id.shape_rect:
                 shape_mode = R.id.shape_rect;
+                this.setTitle("Rectangle");
                 break;
             case R.id.shape_triangle:
                 shape_mode = R.id.shape_triangle;
+                this.setTitle("Triangle");
                 break;
 
             case R.id.only_border:
@@ -177,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         mHollowPaint.setColor(Color.BLACK);
 
         mPaintToUse = mHollowPaint;    // by default the hollow object will be created
+        this.setTitle("Line");
     }
 
     public class DrawingView extends View {
@@ -194,8 +197,9 @@ public class MainActivity extends AppCompatActivity {
         private float xmin = -1000, xmax = -1000, ymin = -1000, ymax = -1000;
         private float x_min = -1000, x_max = -1000, y_min = -1000, y_max = -1000;
         float xstart = 0, ystart = 0, xend = 0, yend = 0;
-        float x1,y1,x2,y2,x3,y3;
-        float res;
+        float x1, y1, x2, y2, x3, y3;
+        float x1_f, y1_f, x2_f, y2_f, x3_f, y3_f;
+        double res = 0.0;
 
         public DrawingView(Context c) {
             super(c);
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
-            points = new ArrayList<Float>();
+            points = new ArrayList<>();
             points.add(x);
             points.add(y);
             mX = x;
@@ -283,65 +287,54 @@ public class MainActivity extends AppCompatActivity {
             } else if (shape_mode == R.id.shape_triangle) {
                 Path path = new Path();
                 path.setFillType(Path.FillType.EVEN_ODD);
-                path.moveTo((xmax + xmin) / 2, ymin);
-                path.lineTo(xmin, ymax);
-                path.lineTo(xmax, ymax);
-                path.lineTo((xmax + xmin) / 2, ymin);
-                path.close();
-                mCanvas.drawPath(path, mPaintToUse);
 
                 // for convex
                 try {
                     List<Float> hullPoints = ConvexHull.main(points);    // This gives points of convex hull
-//                    System.out.println(hullPoints.size());
-
-                    // TODO we have to find three points here
-
-                    if (hullPoints.size() > 1) {
-                        Path path2 = new Path();
-                        path2.setFillType(Path.FillType.EVEN_ODD);
+                    int hullSize = hullPoints.size();
+                    if (hullSize > 1) {
                         res = 0;
-                        int total_points = hullPoints.size()/2;
-                        System.out.println("total_points"+total_points);
-                        for (int i = 0; i < total_points-4; i=i+2)
-                        {
-                            for (int j = i+2; j < total_points-2; j=j+2)
-                            {
-                                for (int k = i+4; k < total_points; k=k+2)
-                                {
-                                     x1 = hullPoints.get(i);
-                                     y1 = hullPoints.get(i+1);
-                                     x2 = hullPoints.get(j);
-                                     y2 = hullPoints.get(j+1);
-                                     x3 = hullPoints.get(k);
-                                     y3 = hullPoints.get(k+1);
-                                     res = (float) Math.max(res, 0.5 * Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)));
+                        int total_points = hullSize / 2;
+
+                        if (total_points > 3) {
+                            for (int i = 0; i < hullSize - 4; i = i + 2) {
+                                for (int j = i + 2; j < hullSize - 2; j = j + 2) {
+                                    for (int k = i + 4; k < hullSize; k = k + 2) {
+                                        x1 = hullPoints.get(i);
+                                        y1 = hullPoints.get(i + 1);
+                                        x2 = hullPoints.get(j);
+                                        y2 = hullPoints.get(j + 1);
+                                        x3 = hullPoints.get(k);
+                                        y3 = hullPoints.get(k + 1);
+
+                                        double areaTemp = (0.5 * Math.abs((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))));
+                                        if (res < areaTemp) {
+                                            res = areaTemp;
+                                            x1_f = x1;
+                                            x2_f = x2;
+                                            x3_f = x3;
+                                            y1_f = y1;
+                                            y2_f = y2;
+                                            y3_f = y3;
+                                        }
+                                    }
                                 }
                             }
 
+                            path.moveTo(x1_f, y1_f);
+                            path.lineTo(x2_f, y2_f);
+                            path.lineTo(x3_f, y3_f);
+                            path.close();
+                            mCanvas.drawPath(path, mPaintToUse);
+                        } else {
+                            path.moveTo(hullPoints.get(0), hullPoints.get(1));
+                            for (int i = 2; i < hullPoints.size(); i = i + 2) {
+                                path.lineTo(hullPoints.get(i), hullPoints.get(i + 1));
+                            }
+
+                            path.close();
+                            mCanvas.drawPath(path, mPaintToUse);
                         }
-                        System.out.println("area"+res);
-                        System.out.println("h"+hullPoints.size());
-                        System.out.println("hi"+x1);
-                        System.out.println("hii"+y1);
-                        System.out.println("hiii"+x2);
-                        System.out.println("hiiii"+y2);
-                        System.out.println("hiiiii"+x3);
-                        System.out.println("hiiiiii"+y3);
-
-//                        path2.moveTo(hullPoints.get(0), hullPoints.get(1));
-//                        for (int i = 2; i < hullPoints.size(); i = i + 2) {
-//                            path2.lineTo(hullPoints.get(i), hullPoints.get(i + 1));
-//                        }
-                        path2.moveTo(x1,y1);
-                        path2.lineTo(x2, y2);
-                        path2.lineTo(x3, y3);
-
-                        path2.close();
-                        int color2 = mPaintToUse.getColor();
-                        mPaintToUse.setColor(Color.RED);
-                        mCanvas.drawPath(path2, mPaintToUse);
-                        mPaintToUse.setColor(color2);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -370,11 +363,11 @@ public class MainActivity extends AppCompatActivity {
             }
             if ((ymin == -1000) || (ymin > y)) {
                 ymin = y;
-                x_min=x;
+                x_min = x;
             }
             if ((ymax == -1000) || (ymax < y)) {
                 ymax = y;
-                x_max=x;
+                x_max = x;
             }
 
             switch (event.getAction()) {
