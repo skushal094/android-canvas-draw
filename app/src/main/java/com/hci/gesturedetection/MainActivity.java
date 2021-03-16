@@ -27,10 +27,25 @@ public class MainActivity extends AppCompatActivity {
     private Paint mPaint, mFillPaint, mHollowPaint, mPaintToUse, mPaintFillBorder;
     private int shape_mode = R.id.shape_line;
     private boolean isFilling = false;
+    private String titleShape = "Line", titleColor = "Only Border";
 
     // for convex hull
     List<Float> points;
 
+
+    private void setTitle() {
+        super.setTitle(titleShape + ":" + titleColor);
+    }
+
+    private void setTitleShape(String title_shape) {
+        titleShape = title_shape;
+        setTitle();
+    }
+
+    private void setTitleColor(String title_color) {
+        titleColor = title_color;
+        setTitle();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,84 +63,96 @@ public class MainActivity extends AppCompatActivity {
                 shape_mode = 0; // zero for free hand
                 isFilling = false;
                 mPaintToUse = mHollowPaint;
-                this.setTitle("Free Hand");
+                setTitleShape("Free Hand");
                 break;
 
             case R.id.shape_line:
                 shape_mode = R.id.shape_line;
-                this.setTitle("Line");
+                setTitleShape("Line");
                 break;
             case R.id.shape_circle:
                 shape_mode = R.id.shape_circle;
-                this.setTitle("Circle");
+                setTitleShape("Circle");
                 break;
             case R.id.shape_rect:
                 shape_mode = R.id.shape_rect;
-                this.setTitle("Rectangle");
+                setTitleShape("Rectangle");
                 break;
             case R.id.shape_triangle:
                 shape_mode = R.id.shape_triangle;
-                this.setTitle("Triangle");
+                setTitleShape("Triangle");
                 break;
 
             case R.id.only_border:
                 isFilling = false;
                 mPaintToUse = mHollowPaint;
+                setTitleColor("Only Border");
                 break;
             case R.id.color_white:
                 isFilling = true;
                 mFillPaint.setColor(Color.WHITE);
                 mPaintToUse = mFillPaint;
+                setTitleColor("White");
                 break;
             case R.id.color_black:
                 isFilling = true;
                 mFillPaint.setColor(Color.BLACK);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Black");
                 break;
             case R.id.color_blue:
                 isFilling = true;
                 mFillPaint.setColor(Color.BLUE);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Blue");
                 break;
             case R.id.color_green:
                 isFilling = true;
                 mFillPaint.setColor(Color.GREEN);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Green");
                 break;
             case R.id.color_red:
                 isFilling = true;
                 mFillPaint.setColor(Color.RED);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Red");
                 break;
             case R.id.color_yellow:
                 isFilling = true;
                 mFillPaint.setColor(Color.YELLOW);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Yellow");
                 break;
             case R.id.color_cyan:
                 isFilling = true;
                 mFillPaint.setColor(Color.CYAN);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Cyan");
                 break;
             case R.id.color_dark_gray:
                 isFilling = true;
                 mFillPaint.setColor(Color.DKGRAY);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Dark Gray");
                 break;
             case R.id.color_gray:
                 isFilling = true;
                 mFillPaint.setColor(Color.GRAY);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Gray");
                 break;
             case R.id.color_light_gray:
                 isFilling = true;
                 mFillPaint.setColor(Color.LTGRAY);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Light Gray");
                 break;
             case R.id.color_magenta:
                 isFilling = true;
                 mFillPaint.setColor(Color.MAGENTA);
                 mPaintToUse = mFillPaint;
+                setTitleColor("Magenta");
                 break;
 
             case R.id.item_clear:
@@ -177,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         mHollowPaint.setColor(Color.BLACK);
 
         mPaintToUse = mHollowPaint;    // by default the hollow object will be created
-        this.setTitle("Line");
+        setTitle();
     }
 
     public class DrawingView extends View {
