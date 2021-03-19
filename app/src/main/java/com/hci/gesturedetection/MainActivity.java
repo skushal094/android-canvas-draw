@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_free_hand:
                 shape_mode = 0; // zero for free hand
                 isFilling = false;
+                mHollowPaint.setColor(mPaintToUse.getColor());
                 mPaintToUse = mHollowPaint;
                 setTitleShape("Free Hand");
                 break;
