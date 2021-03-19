@@ -47,6 +47,24 @@ public class MainActivity extends AppCompatActivity {
         setTitle();
     }
 
+    private void setColorOnSelect(int color) {
+        if (shape_mode == 0) {
+            mHollowPaint.setColor(color);
+            mPaintToUse = mHollowPaint;
+        } else {
+            mFillPaint.setColor(color);
+            mPaintToUse = mFillPaint;
+        }
+    }
+
+    private void adjustColor() {
+        if ((shape_mode == R.id.shape_circle || shape_mode == R.id.shape_rect || shape_mode == R.id.shape_triangle) && !(titleColor.equals("Only Border"))) {
+            isFilling = true;
+            mFillPaint.setColor(mPaintToUse.getColor());
+            mPaintToUse = mFillPaint;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -68,90 +86,84 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.shape_line:
                 shape_mode = R.id.shape_line;
+                adjustColor();
                 setTitleShape("Line");
                 break;
             case R.id.shape_circle:
                 shape_mode = R.id.shape_circle;
+                adjustColor();
                 setTitleShape("Circle");
                 break;
             case R.id.shape_rect:
                 shape_mode = R.id.shape_rect;
+                adjustColor();
                 setTitleShape("Rectangle");
                 break;
             case R.id.shape_triangle:
                 shape_mode = R.id.shape_triangle;
+                adjustColor();
                 setTitleShape("Triangle");
                 break;
 
             case R.id.only_border:
                 isFilling = false;
+                mHollowPaint.setColor(Color.BLACK);
                 mPaintToUse = mHollowPaint;
                 setTitleColor("Only Border");
                 break;
             case R.id.color_white:
                 isFilling = true;
-                mFillPaint.setColor(Color.WHITE);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.WHITE);
                 setTitleColor("White");
                 break;
             case R.id.color_black:
                 isFilling = true;
-                mFillPaint.setColor(Color.BLACK);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.BLACK);
                 setTitleColor("Black");
                 break;
             case R.id.color_blue:
                 isFilling = true;
-                mFillPaint.setColor(Color.BLUE);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.BLUE);
                 setTitleColor("Blue");
                 break;
             case R.id.color_green:
                 isFilling = true;
-                mFillPaint.setColor(Color.GREEN);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.GREEN);
                 setTitleColor("Green");
                 break;
             case R.id.color_red:
                 isFilling = true;
-                mFillPaint.setColor(Color.RED);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.RED);
                 setTitleColor("Red");
                 break;
             case R.id.color_yellow:
                 isFilling = true;
-                mFillPaint.setColor(Color.YELLOW);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.YELLOW);
                 setTitleColor("Yellow");
                 break;
             case R.id.color_cyan:
                 isFilling = true;
-                mFillPaint.setColor(Color.CYAN);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.CYAN);
                 setTitleColor("Cyan");
                 break;
             case R.id.color_dark_gray:
                 isFilling = true;
-                mFillPaint.setColor(Color.DKGRAY);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.DKGRAY);
                 setTitleColor("Dark Gray");
                 break;
             case R.id.color_gray:
                 isFilling = true;
-                mFillPaint.setColor(Color.GRAY);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.GRAY);
                 setTitleColor("Gray");
                 break;
             case R.id.color_light_gray:
                 isFilling = true;
-                mFillPaint.setColor(Color.LTGRAY);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.LTGRAY);
                 setTitleColor("Light Gray");
                 break;
             case R.id.color_magenta:
                 isFilling = true;
-                mFillPaint.setColor(Color.MAGENTA);
-                mPaintToUse = mFillPaint;
+                setColorOnSelect(Color.MAGENTA);
                 setTitleColor("Magenta");
                 break;
 
