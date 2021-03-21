@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     // for convex hull
     List<Float> points;
 
+    List<List<Object>> actionLog = new ArrayList<>();
 
     private void setTitle() {
         super.setTitle(titleShape + ":" + titleColor);
@@ -169,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.item_clear:
+                actionLog.clear();
                 dv = new DrawingView(this);
                 dv.setBackgroundColor(0xFFFFFFFF);
                 setContentView(dv);
@@ -259,6 +261,32 @@ public class MainActivity extends AppCompatActivity {
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
 
+            for (int i = 0; i < actionLog.size() - 1; i++) {
+                List<Object> oneAction = actionLog.get(i);
+                if (((String) oneAction.get(0)).equals("line")) {
+                    mCanvas.drawLine((float) oneAction.get(2), (float) oneAction.get(3), (float) oneAction.get(4), (float) oneAction.get(5), (Paint) oneAction.get(1));
+                } else if (((String) oneAction.get(0)).equals("rect")) {
+                    mCanvas.drawRect((float) oneAction.get(2), (float) oneAction.get(3), (float) oneAction.get(4), (float) oneAction.get(5), (Paint) oneAction.get(1));
+                    if ((boolean) oneAction.get(6)) {
+                        mCanvas.drawRect((float) oneAction.get(2), (float) oneAction.get(3), (float) oneAction.get(4), (float) oneAction.get(5), mPaintFillBorder);
+                    }
+                } else if (((String) oneAction.get(0)).equals("circle")) {
+                    mCanvas.drawCircle((float) oneAction.get(2), (float) oneAction.get(3), (float) oneAction.get(4), (Paint) oneAction.get(1));
+                    if ((boolean) oneAction.get(5)) {
+                        mCanvas.drawCircle((float) oneAction.get(2), (float) oneAction.get(3), (float) oneAction.get(4), mPaintFillBorder);
+                    }
+                } else if (((String) oneAction.get(0)).equals("triangle")) {
+                    mCanvas.drawPath((Path) oneAction.get(2), (Paint) oneAction.get(1));
+                    if ((boolean) oneAction.get(3)) {
+                        mCanvas.drawPath((Path) oneAction.get(2), mPaintFillBorder);
+                    }
+                } else if (((String) oneAction.get(0)).equals("free")) {
+                    mCanvas.drawPath((Path) oneAction.get(2), (Paint) oneAction.get(1));
+                }
+            }
+            if (actionLog.size() > 0) {
+                actionLog.remove(actionLog.size() - 1);
+            }
         }
 
         @Override
@@ -304,6 +332,12 @@ public class MainActivity extends AppCompatActivity {
             circlePath.reset();
             // commit the path to our offscreen
             if (shape_mode == 0) {
+                List<Object> thisAction = new ArrayList<Object>();
+                thisAction.add("free");
+                thisAction.add(copyPaint(mPaintToUse));
+                thisAction.add(new Path(mPath));
+                actionLog.add(thisAction);
+
                 mCanvas.drawPath(mPath, mPaintToUse);
             }
             // kill this so we don't double draw
@@ -312,11 +346,30 @@ public class MainActivity extends AppCompatActivity {
 
         private void drawShape() {
             if (shape_mode == R.id.shape_rect) {
+                List<Object> thisAction = new ArrayList<Object>();
+                thisAction.add("rect");
+                thisAction.add(copyPaint(mPaintToUse));
+                thisAction.add(x_min);
+                thisAction.add(y_min);
+                thisAction.add(x_max);
+                thisAction.add(y_max);
+                thisAction.add(isFilling);
+                actionLog.add(thisAction);
+
                 mCanvas.drawRect(x_min, y_min, x_max, y_max, mPaintToUse);
                 if (isFilling) {
                     mCanvas.drawRect(x_min, y_min, x_max, y_max, mPaintFillBorder);
                 }
             } else if (shape_mode == R.id.shape_circle) {
+                List<Object> thisAction = new ArrayList<Object>();
+                thisAction.add("circle");
+                thisAction.add(copyPaint(mPaintToUse));
+                thisAction.add((x_max + x_min) / 2);
+                thisAction.add((y_max + y_min) / 2);
+                thisAction.add(((x_max - x_min) + (y_max - y_min)) / 4);
+                thisAction.add(isFilling);
+                actionLog.add(thisAction);
+
                 mCanvas.drawCircle((x_max + x_min) / 2, (y_max + y_min) / 2, ((x_max - x_min) + (y_max - y_min)) / 4, mPaintToUse);
                 if (isFilling) {
                     mCanvas.drawCircle((x_max + x_min) / 2, (y_max + y_min) / 2, ((x_max - x_min) + (y_max - y_min)) / 4, mPaintFillBorder);
@@ -362,6 +415,14 @@ public class MainActivity extends AppCompatActivity {
                             path.lineTo(x2_f, y2_f);
                             path.lineTo(x3_f, y3_f);
                             path.close();
+
+                            List<Object> thisAction = new ArrayList<Object>();
+                            thisAction.add("triangle");
+                            thisAction.add(copyPaint(mPaintToUse));
+                            thisAction.add(new Path(path));
+                            thisAction.add(isFilling);
+                            actionLog.add(thisAction);
+
                             mCanvas.drawPath(path, mPaintToUse);
                         } else {
                             path.moveTo(hullPoints.get(0), hullPoints.get(1));
@@ -370,6 +431,14 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             path.close();
+
+                            List<Object> thisAction = new ArrayList<Object>();
+                            thisAction.add("triangle");
+                            thisAction.add(copyPaint(mPaintToUse));
+                            thisAction.add(new Path(path));
+                            thisAction.add(isFilling);
+                            actionLog.add(thisAction);
+
                             mCanvas.drawPath(path, mPaintToUse);
                         }
                     }
@@ -381,8 +450,20 @@ public class MainActivity extends AppCompatActivity {
                     mCanvas.drawPath(path, mPaintFillBorder);
                 }
             } else if (shape_mode == R.id.shape_line) {
+                List<Object> thisAction = new ArrayList<Object>();
+                thisAction.add("line");
+                thisAction.add(copyPaint(mPaintToUse));
+                thisAction.add(x_start);
+                thisAction.add(y_start);
+                thisAction.add(x_end);
+                thisAction.add(y_end);
+                actionLog.add(thisAction);
                 mCanvas.drawLine(x_start, y_start, x_end, y_end, mPaintToUse);
             }
+        }
+
+        private Paint copyPaint(Paint obj) {
+            return new Paint(obj);
         }
 
         @Override
@@ -404,6 +485,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             switch (event.getAction()) {
+                case MotionEvent.ACTION_POINTER_2_DOWN:
+                    dv = new DrawingView(MainActivity.this);
+                    dv.setBackgroundColor(0xFFFFFFFF);
+                    setContentView(dv);
+                    break;
                 case MotionEvent.ACTION_DOWN:
                     x_start = x;
                     y_start = y;
