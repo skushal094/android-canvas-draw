@@ -14,6 +14,8 @@ Timer timer;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
+
+        getSupportActionBar().hide();
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
