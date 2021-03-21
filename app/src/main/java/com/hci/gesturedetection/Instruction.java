@@ -16,6 +16,7 @@ public class Instruction extends AppCompatActivity {
         setContentView(R.layout.activity_instruction);
         addListenerButton();
     }
+
     public void addListenerButton() {
         buttonAccept = findViewById(R.id.buttonAccept);
         buttonAccept.setOnClickListener(new View.OnClickListener() {

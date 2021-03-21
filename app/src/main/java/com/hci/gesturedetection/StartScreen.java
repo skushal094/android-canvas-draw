@@ -9,7 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class StartScreen extends AppCompatActivity {
-Timer timer;
+    Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ Timer timer;
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+        }, 4000);
     }
 
 }

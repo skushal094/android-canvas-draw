@@ -70,13 +70,12 @@ public class ConvexHull {
     }
     */
 
-    public static int orientation(Point p, Point q, Point r)
-    {
+    public static int orientation(Point p, Point q, Point r) {
         int val = (q.y - p.y) * (r.x - q.x) -
                 (q.x - p.x) * (r.y - q.y);
 
         if (val == 0) return 0;  // collinear
-        return (val > 0)? 1: 2; // clock or counter-clock wise
+        return (val > 0) ? 1 : 2; // clock or counter-clock wise
     }
 
     public static Point[] convex_hull(Point[] P) {
@@ -103,8 +102,7 @@ public class ConvexHull {
             // again. This loop runs O(h) times where h is
             // number of points in result or output.
             int p = l, q;
-            do
-            {
+            do {
                 // Add current point to result
                 hull.add(P[p]);
 
@@ -116,8 +114,7 @@ public class ConvexHull {
                 // counter-clockwise than q, then update q.
                 q = (p + 1) % n;
 
-                for (int i = 0; i < n; i++)
-                {
+                for (int i = 0; i < n; i++) {
                     // If i is more counterclockwise than
                     // current q, then update q
                     if (orientation(P[p], P[i], P[q]) == 2)
@@ -151,7 +148,7 @@ public class ConvexHull {
 //        StringTokenizer st = new StringTokenizer(f.readLine());
 //        Point[] p = new Point[Integer.parseInt(st.nextToken())];
         int initial = 0;
-        Point[] p = new Point[points.size()/4];
+        Point[] p = new Point[points.size() / 4];
         for (int i = 0; i < p.length; i++) {
             p[i] = new Point();
 //            p[i].x = Integer.parseInt(st.nextToken()); // Read X coordinate
