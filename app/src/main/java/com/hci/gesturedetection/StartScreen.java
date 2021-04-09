@@ -9,11 +9,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class StartScreen extends AppCompatActivity {
-Timer timer;
+    Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
+
+        getSupportActionBar().hide();
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -22,7 +25,7 @@ Timer timer;
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+        }, 4000);
     }
 
 }

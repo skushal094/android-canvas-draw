@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         private float mX, mY;
         private static final float TOUCH_TOLERANCE = 4;
 
-    private void                                                                                                                                                                                                                                                                                        touch_start(float x, float y) {
+        private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
             points = new ArrayList<>();
