@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Instruction">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/instructionsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:background="#FFFFFF"
+            android:text="Instructions"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/instructionsHeader"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="You can selet color and shape from the option menu (three dots at top right)."
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text1"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="By default, you will be drawing line with only border setting."
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text2"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="BONUS PART: You can tap on the screen with two fingers to delete the last drawn object."
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/buttonAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/black"
+            android:text="Click to Draw"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_free_hand"
+        android:title="Free Hand"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_shape"
+        android:title="Shapes"
+        app:showAsAction="never">
+
+        <menu>
+            <item
+                android:id="@+id/shape_line"
+                android:title="Line" />
+            <item
+                android:id="@+id/shape_rect"
+                android:title="Rectangle" />
+            <item
+                android:id="@+id/shape_circle"
+                android:title="Circle" />
+            <item
+                android:id="@+id/shape_triangle"
+                android:title="Triangle" />
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/item_color"
+        android:title="Colors"
+        app:showAsAction="never">
+
+        <menu>
+            <item
+                android:id="@+id/only_border"
+                android:title="Only Border" />
+            <item
+                android:id="@+id/color_white"
+                android:title="White" />
+            <item
+                android:id="@+id/color_black"
+                android:title="Black" />
+            <item
+                android:id="@+id/color_red"
+                android:title="Red" />
+            <item
+                android:id="@+id/color_blue"
+                android:title="Blue" />
+            <item
+                android:id="@+id/color_green"
+                android:title="Green" />
+            <item
+                android:id="@+id/color_yellow"
+                android:title="Yellow" />
+            <item
+                android:id="@+id/color_cyan"
+                android:title="Cyan" />
+            <item
+                android:id="@+id/color_dark_gray"
+                android:title="Dark Gray" />
+            <item
+                android:id="@+id/color_gray"
+                android:title="Gray" />
+            <item
+                android:id="@+id/color_light_gray"
+                android:title="Light Gray" />
+            <item
+                android:id="@+id/color_magenta"
+                android:title="Magenta" />
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/item_clear"
+        android:title="Clear"
+        app:showAsAction="never" />
+
+</menu>
